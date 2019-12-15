@@ -1,0 +1,6 @@
+flask
+flask-cors
+kaga-logger-kagamino
+pylint
+pytest
+peewee

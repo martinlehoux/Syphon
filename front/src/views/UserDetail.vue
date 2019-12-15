@@ -1,22 +1,20 @@
 <template lang="pug">
-  div
-    h1 {{user.username}}
-    table
-      thead
-        tr
-          th Chrono
-          th Date
-      tbody
-        tr(v-for="record in records")
-          td {{(record.chrono / 1000).toFixed(3)}}
-          td {{record.timestamp.toLocaleString()}}
-    form(@submit.prevent="createRecord")
-      //- input(type="date-time" v-model="newRecord.timestamp")
-      button(@click.prevent="startChrono()") Start
-      button(@click.prevent="stopChrono()") Stop
-      //- input(type="number" step="0.001" v-model.number="newRecord.chrono")
-      p {{(newRecord.chrono / 1000).toFixed(3)}}
-      input(type="submit" value="Ajouter")
+div
+  h1 {{user.username}}
+  table
+    thead
+      tr
+        th(@click="orderRecords('chrono')") Chrono
+        th(@click="orderRecords('timestamp')") Date
+    tbody
+      tr(v-for="record in records")
+        td {{(record.chrono / 1000).toFixed(3)}}
+        td {{record.timestamp.toLocaleString()}}
+  form(@submit.prevent="createRecord")
+    button(@click.prevent="startChrono()") Start
+    button(@click.prevent="stopChrono()") Stop
+    p {{(newRecord.chrono / 1000).toFixed(3)}}
+    input(type="submit" value="Ajouter")
 </template>
 
 <script>
@@ -46,6 +44,19 @@ export default {
         .catch(err => alert(err))
       this.newRecord = new Record({})
     },
+    orderRecords (order) {
+      switch (order) {
+        case 'chrono':
+          this.records.sort((a, b) => a.chrono > b.chrono)
+          break
+        case 'timestamp':
+          this.records.sort((a, b) => a.timestamp < b.timestamp)
+          break
+        default:
+          this.records.sort((a, b) => a.timestamp < b.timestamp)
+          break
+      }
+    },
     startChrono () {
       const start = new Date()
       this.interval = setInterval(() => {
@@ -60,6 +71,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+table {
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>

@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS, cross_origin
 from kaga_logger import INFO, Logger, DEBUG
 from models import User, Record, DoesNotExist
+from sys import argv
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -45,5 +46,15 @@ def user_record_list(username: str):
         record = Record.get_by_id(record.id)
         return jsonify(record.json()), 201
 
+@app.route('/records', methods=['GET'])
+def record_list():
+    if request.method == 'GET':
+        records = Record.select()
+        return jsonify([record.json() for record in records])
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    try:
+        hostname = argv[1]
+    except IndexError:
+        hostname = 'localhost'
+    app.run(debug=True, host=hostname)

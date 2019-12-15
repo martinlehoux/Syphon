@@ -9,8 +9,6 @@ export class User {
 export class Record {
   timestamp = new Date()
   chrono = 0
-  id = null
-  user = null
 
   constructor ({ timestamp, chrono, id, user }) {
     if (timestamp) this.timestamp = new Date(timestamp)

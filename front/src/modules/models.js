@@ -7,11 +7,11 @@ export class User {
 }
 
 export class Record {
-  timestamp = new Date()
+  date = ''
   chrono = 0
 
-  constructor ({ timestamp, chrono, id, user }) {
-    if (timestamp) this.timestamp = new Date(timestamp)
+  constructor ({ date, chrono, id, user }) {
+    if (date) this.date = date
     if (chrono) this.chrono = chrono
     if (id) this.id = id
     if (user) this.user = user

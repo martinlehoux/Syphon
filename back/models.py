@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import List
 from peewee import (
     Model, SqliteDatabase,
-    DateTimeField, IntegerField, ForeignKeyField, CharField,
+    DateField, IntegerField, ForeignKeyField, CharField,
     DoesNotExist
 )
 
@@ -29,14 +29,14 @@ class Record(Model):
     class Meta:
         database = db
 
-    timestamp = DateTimeField(index=True, default=datetime.now, formats=["%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%d %H:%M:%S.%f"])
+    date = DateField(index=True, default=datetime.now, formats=['%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%d'])
     chrono = IntegerField(index=True)
     user = ForeignKeyField(model=User, backref="records", on_delete='CASCADE')
 
     def json(self):
         return dict(
             id=self.id,
-            timestamp=self.timestamp.isoformat() + "Z", # pylint: disable=no-member
+            date=self.date.isoformat(), # pylint: disable=no-member
             chrono=float(self.chrono),
             user=self.user.username
         )

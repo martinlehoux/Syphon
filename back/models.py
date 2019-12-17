@@ -2,13 +2,15 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import List
+from os import environ
+import re
 from peewee import (
     Model, SqliteDatabase,
     DateField, IntegerField, ForeignKeyField, CharField,
     DoesNotExist
 )
 
-db = SqliteDatabase('dev.db')
+db = SqliteDatabase(f"{environ.get('ENV')}.db")
 
 class User(Model):
     class Meta:
@@ -37,7 +39,7 @@ class Record(Model):
         return dict(
             id=self.id,
             date=self.date.isoformat(), # pylint: disable=no-member
-            chrono=float(self.chrono),
+            chrono=self.chrono,
             user=self.user.username
         )
 

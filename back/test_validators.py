@@ -1,7 +1,10 @@
-from validators import User, Record
-from pytest import raises
-from peewee import DoesNotExist, IntegrityError
 from datetime import date
+
+from peewee import DoesNotExist, IntegrityError
+from pytest import raises
+
+from validators import Record, User
+
 
 def teardown_function():
     User.delete().execute() # pylint: disable=no-value-for-parameter
@@ -31,4 +34,3 @@ def test_record_validator():
     Record.create(date=date.today(), chrono=1000, user="abcd")
     with raises(DoesNotExist):
         Record.create(date=date.today(), chrono=1000, user="none")
-    

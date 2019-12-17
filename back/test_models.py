@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta
-from peewee import SqliteDatabase
+from datetime import datetime
+
 from models import Record, User
+
 
 def teardown_function():
     User.delete().execute() # pylint: disable=no-value-for-parameter

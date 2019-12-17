@@ -4,9 +4,9 @@ div
     sui-item(v-for="record in records" :key="record.id")
       sui-item-image
       sui-item-content
-        sui-item-header {{(record.chrono / 1000).toFixed(3)}} sec by {{record.user}}
+        sui-item-header {{(record.chrono / 1000).toFixed(2)}} sec by {{record.user}}
         sui-item-meta
-          span {{record.timestamp.toLocaleString()}}
+          span {{record.date}}
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
   created () {
     this.$http.get('records')
       .then(res => (this.records = res.data.map(record => new Record(record))))
-      .catch(err => alert(err))
+      .catch(err => this.$store.commit('addError', err.response.data.error))
   },
   methods: {
     orderRecords (order) {
@@ -30,11 +30,11 @@ export default {
         case 'chrono':
           this.records.sort((a, b) => a.chrono > b.chrono)
           break
-        case 'timestamp':
-          this.records.sort((a, b) => a.timestamp < b.timestamp)
+        case 'date':
+          this.records.sort((a, b) => a.date < b.date)
           break
         default:
-          this.records.sort((a, b) => a.timestamp < b.timestamp)
+          this.records.sort((a, b) => a.date < b.date)
           break
       }
     }

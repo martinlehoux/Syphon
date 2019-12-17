@@ -1,11 +1,23 @@
 <template lang="pug">
 div(id="app")
+  error-list
   div(id="nav")
     router-link(to="/users") User List &nbsp;
     router-link(to="/records") Records
   sui-container
     router-view
 </template>
+
+<script>
+import ErrorList from '@/components/ErrorList.vue'
+export default {
+  components: {
+    ErrorList
+  },
+  created () {
+  }
+}
+</script>
 
 <style>
 #app {

@@ -21,13 +21,13 @@ export default {
   created () {
     this.$http.get('users')
       .then(res => (this.users = res.data.map(user => new User(user))))
-      .catch(err => alert(err))
+      .catch(err => this.$store.commit('addError', err.response.data.error))
   },
   methods: {
     createUser () {
       this.$http.post('users', this.newUser)
         .then(res => this.users.push(new User(res.data)))
-        .catch(err => alert(err))
+        .catch(err => this.$store.commit('addError', err.response.data.error))
       this.newUser = new User({})
     }
   }

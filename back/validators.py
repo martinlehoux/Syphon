@@ -1,6 +1,6 @@
 import re
 from datetime import date as datetype
-from typing import Union
+from typing import List, Union
 
 from models import Record as RecordModel
 from models import User as UserModel
@@ -8,7 +8,7 @@ from models import User as UserModel
 
 class User(UserModel):
     @staticmethod
-    def create(username: str, first_name: str = None, last_name: str = None): # pylint: disable=arguments-differ
+    def create(username: str, first_name: str = None, last_name: str = None, records: List[RecordModel] = None): # pylint: disable=arguments-differ
         # username
         assert isinstance(username, str), "User.username must be a str."
         assert re.match(r'^[\w.-]+$', username), "User.username must use only a-zA-Z, _, - or . characters."
@@ -29,7 +29,7 @@ class Record(RecordModel):
         assert chrono > 0, "Record.chrono must be greater than 0."
         # user
         assert user is not None, "Record.user can't be None"
-        assert isinstance(user, (str, UserModel))
+        assert isinstance(user, (str, UserModel)), "Record.user must be a str or a User."
         if isinstance(user, str):
             UserModel.get_by_id(user)
 

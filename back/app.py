@@ -43,7 +43,7 @@ def user_detail(username: str):
             user = User.get(User.username == username)
             return jsonify(user.json())
         except DoesNotExist:
-            abort(404, f"user '{username}' not found")
+            abort(404, f"User '{username}' not found")
 
 @APP.route('/users/<string:username>/records', methods=['GET', 'POST'])
 @cross_origin()
@@ -64,6 +64,16 @@ def record_list():
     if request.method == 'GET':
         records = Record.select()
         return jsonify([record.json() for record in records])
+
+@APP.route('/records/<int:record_id>', methods=['DELETE'])
+def record_detail(record_id: int):
+    if request.method == 'DELETE':
+        try:
+            record = Record.get_by_id(record_id)
+            record.delete_instance()
+            return jsonify(), 204
+        except DoesNotExist:
+            abort(404, f"Record '{record_id}' not found'")
 
 if __name__ == "__main__":
     try:

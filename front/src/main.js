@@ -2,7 +2,6 @@ import Vue from 'vue'
 import http from '@/modules/http'
 import error from '@/modules/error'
 import SuiVue from 'semantic-ui-vue'
-import VueGoogleCharts from 'vue-google-charts'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -14,7 +13,6 @@ Vue.prototype.$http = http
 Vue.prototype.$error = error
 
 Vue.use(SuiVue)
-Vue.use(VueGoogleCharts)
 
 new Vue({
   router,

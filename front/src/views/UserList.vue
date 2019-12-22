@@ -38,11 +38,15 @@ export default {
   },
   methods: {
     createUser () {
-      this.$http.post('users', this.newUser)
-        .then(res => this.users.push(new User(res.data)))
-        .then(() => this.$router.push(`/users/${this.newUser.username}`))
-        .catch(err => this.$error(err))
-        .then(() => (this.newUser = new User({})))
+      if (this.users.map(user => user.username).includes(this.newUser.username)) {
+        this.$router.push(`/users/${this.newUser.username}`)
+      } else {
+        this.$http.post('users', this.newUser)
+          .then(res => this.users.push(new User(res.data)))
+          .then(() => this.$router.push(`/users/${this.newUser.username}`))
+          .catch(err => this.$error(err))
+          .then(() => (this.newUser = new User({})))
+      }
     },
     orderUsers (order) {
       switch (order) {

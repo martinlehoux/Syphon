@@ -4,7 +4,7 @@ from sys import argv
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS, cross_origin
 from kaga_logger import DEBUG, Logger
-from peewee import DoesNotExist
+from peewee import DoesNotExist, IntegrityError
 
 from validators import Record, User
 
@@ -32,7 +32,7 @@ def user_list():
         try:
             user = User.create(**request.json)
             return jsonify(user.json()), 201
-        except AssertionError as err:
+        except (AssertionError, IntegrityError) as err:
             abort(400, err)
 
 @APP.route('/users/<string:username>', methods=['GET'])

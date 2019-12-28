@@ -16,11 +16,16 @@ class User(Model):
     first_name = CharField(index=True, null=True)
     last_name = CharField(index=True, null=True)
 
+    @property
+    def best_record(self):
+        return self.records.select().order_by(Record.chrono).limit(1).get()
+
     def json(self):
         return dict(
             username=self.username,
             first_name=self.first_name,
             last_name=self.last_name,
+            bestRecord=self.best_record.json()
         )
 
 class Record(Model):

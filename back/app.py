@@ -13,6 +13,8 @@ CORS = CORS(APP)
 APP.config['CORS_HEADERS'] = 'Content-Type'
 
 LOGGER = Logger(DEBUG)
+PAGE_SIZE = 10
+
 
 @APP.errorhandler(400)
 def bad_request(err):
@@ -26,7 +28,8 @@ def page_not_found(err):
 @cross_origin()
 def user_list():
     if request.method == "GET":
-        users = User.select()
+        page = int(request.args.get('page')) or 0
+        users = User.select().order_by(User.username).offset(page * PAGE_SIZE).limit(PAGE_SIZE)
         return jsonify([user.json() for user in users])
     if request.method == "POST":
         try:

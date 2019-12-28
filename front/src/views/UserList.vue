@@ -12,6 +12,13 @@ div
           router-link(:to="`/users/${user.username}`") {{user.username}}
         sui-table-cell {{(user.bestRecord.chrono / 1000).toFixed(2)}} sec
         sui-table-cell {{user.distinction}}
+    sui-table-footer
+      sui-table-row
+        sui-table-header-cell(colspan="3")
+          sui-button(:disabled="page <= 0" @click="fetchPage(page-1)" icon)
+            sui-icon(name="left chevron")
+          sui-button(@click="fetchPage(page+1)" icon)
+            sui-icon(name="right chevron")
   sui-segment
     sui-form(@submit.prevent="createUser")
       sui-form-field
@@ -24,19 +31,28 @@ div
 import { User } from '@/modules/models'
 
 export default {
+  name: 'UserList',
   data () {
     return {
       users: [],
-      newUser: new User({})
+      newUser: {} || new User({}),
+      page: Number(this.$route.query.page) || 0
     }
   },
   created () {
-    this.$http.get('users')
-      .then(res => (this.users = res.data.map(user => new User(user))))
-      .then(() => this.users.forEach(user => user.loadRecords()))
-      .catch(err => this.$error(err))
+    this.getUsers()
   },
   methods: {
+    getUsers () {
+      this.$http.get(`users?page=${this.page}`)
+        .then(res => (this.users = res.data.map(user => new User(user))))
+        .catch(err => this.$error(err))
+    },
+    fetchPage (page) {
+      this.page = page
+      this.$router.push(`/users?page=${page}`)
+      this.getUsers()
+    },
     createUser () {
       if (this.users.map(user => user.username).includes(this.newUser.username)) {
         this.$router.push(`/users/${this.newUser.username}`)

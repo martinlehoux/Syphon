@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   h1 {{user.username}}
-  GChart(type="ScatterChart" :data="chartData" :options="chartOptions" v-if="user.records.length>0")
+  GChart(type="LineChart" :data="chartData" :options="chartOptions" v-if="user.records.length>0")
   sui-table(single-line)
     sui-table-header
       sui-table-row
@@ -47,16 +47,15 @@ export default {
       newCustomRecord: new Record({}),
       interval: null,
       chartOptions: {
-        chart: {
-          title: 'Records',
-          legend: { position: 'bottom' }
-        }
+        title: 'Records',
+        legend: { position: 'bottom' },
+        curvetype: 'function'
       }
     }
   },
   computed: {
     chartData () {
-      return [['Date', 'Chrono']].concat(this.user.records.map(record => [record.date, record.chrono]))
+      return [['Date', 'Chrono']].concat(this.user.records.concat().sort((a, b) => (a.date > b.date)).map(record => [record.date, record.chrono]))
     }
   },
   created () {

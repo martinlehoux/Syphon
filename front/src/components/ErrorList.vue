@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     handleDismiss (error) {
-      this.$store.commit('removeError', error)
+      this.$store.dispatch('removeError', error)
     }
   }
 }

@@ -10,11 +10,15 @@ div(id="app")
 
 <script>
 import ErrorList from '@/components/ErrorList.vue'
+
 export default {
+  name: 'App',
   components: {
     ErrorList
   },
-  created () {
+  mounted () {
+    const token = localStorage.getItem('authorizationToken')
+    this.$store.dispatch('saveToken', token)
   }
 }
 </script>

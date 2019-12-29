@@ -33,14 +33,13 @@ def token_protected(route):
         try:
             request.data = jwt.decode(jwt_token, JWT_SECRET_KEY, algorithms='HS512')
         except ExpiredSignatureError:
-            abort(401, "Token expired")
+            abort(498, "Token expired")
         except InvalidTokenError:
             abort(400, "Token is tampered")
         return route(*args, **kwargs)
     wrapper.__name__ = route.__name__
     return wrapper
 
-#498 	Token expired/invalid
 
 @APP.errorhandler(HTTPException)
 def http_exception(err):

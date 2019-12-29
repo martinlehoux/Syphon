@@ -17,7 +17,7 @@ http.interceptors.request.use(config => {
 })
 
 http.interceptors.response.use(res => {
-  if (res.status === 401) {
+  if (res.status === 498) {
     store.dispatch('logout')
   }
   return res

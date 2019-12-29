@@ -39,7 +39,7 @@ export default {
       page: Number(this.$route.query.page) || 0
     }
   },
-  created () {
+  mounted () {
     this.getUsers()
   },
   methods: {

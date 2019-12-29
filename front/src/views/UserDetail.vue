@@ -58,7 +58,7 @@ export default {
       return [['Date', 'Chrono']].concat(this.user.records.concat().sort((a, b) => (a.date > b.date)).map(record => [record.date, record.chrono]))
     }
   },
-  created () {
+  mounted () {
     this.$http.get(`users/${this.$route.params.username}`)
       .then(res => (this.user = new User(res.data)))
       .then(() => this.user.loadRecords())

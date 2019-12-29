@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from datetime import datetime
+from hashlib import scrypt
 from os import environ
 
-from peewee import (CharField, DateField, ForeignKeyField, IntegerField, Model,
-                    SqliteDatabase)
+from peewee import (BlobField, CharField, DateField, ForeignKeyField,
+                    IntegerField, Model, SqliteDatabase)
+
+from conf import SCRYPT_SECRET_KEY
 
 DB = SqliteDatabase(f"{environ.get('ENV')}.db")
 
@@ -13,6 +16,7 @@ class User(Model):
         database = DB
 
     username = CharField(index=True, unique=True, primary_key=True)
+    password_hash = BlobField(null=True)
     first_name = CharField(index=True, null=True)
     last_name = CharField(index=True, null=True)
 
@@ -27,6 +31,14 @@ class User(Model):
             last_name=self.last_name,
             bestRecord=self.best_record.json()
         )
+
+    def update_password(self, password):
+        self.password_hash = scrypt(bytes(password, 'utf-8'), salt=SCRYPT_SECRET_KEY, n=1<<14, r=8, p=1)
+        self.save()
+
+    def check_password(self, password):
+        return scrypt(bytes(password, 'utf-8'), salt=SCRYPT_SECRET_KEY, n=1<<14, r=8, p=1) == self.password_hash
+
 
 class Record(Model):
     class Meta:

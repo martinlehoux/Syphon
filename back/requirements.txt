@@ -4,3 +4,4 @@ kaga-logger-kagamino
 pylint
 pytest
 peewee
+pyjwt

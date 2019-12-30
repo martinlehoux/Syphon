@@ -1,6 +1,5 @@
 from datetime import datetime
 from models import Record, User
-from utils import hash_password
 
 
 def teardown_function():
@@ -9,7 +8,7 @@ def teardown_function():
 
 
 def test_user():
-    User.create(username="Kagamino", first_name="Martin", last_name="Lehoux", email="martin@lehoux.net", password_hash=hash_password('test1234'))
+    User.create(username="Kagamino", first_name="Martin", last_name="Lehoux", email="martin@lehoux.net", password_hash=User.hash_password('test1234'))
 
 def test_record():
     user = User(username="Kagamino")

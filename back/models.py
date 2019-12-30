@@ -2,11 +2,14 @@ from __future__ import annotations
 
 from datetime import datetime
 from os import environ
+from time import time
+from hashlib import scrypt
 
 from peewee import (BlobField, CharField, DateField, ForeignKeyField, BooleanField,
                     IntegerField, Model, SqliteDatabase)
+import jwt
 
-from utils import hash_password
+from conf import SCRYPT_SECRET_KEY, JWT_EXPIRES_IN, JWT_SECRET_KEY
 
 ENV = environ.get('ENV')
 DB = SqliteDatabase(f"{ENV}.db")
@@ -35,16 +38,33 @@ class User(Model):
             first_name=self.first_name,
             last_name=self.last_name,
             bestRecord=self.best_record.json(),
-            inscriptionDate=self.inscription_date.iso_format(), # pylint: disable=no-member
-            isAdmin=self.is_admin
+            inscriptionDate=self.inscription_date.isoformat(), # pylint: disable=no-member
+            isAdmin=self.is_admin,
+            isMember=self.is_member
         )
 
+    @staticmethod
+    def hash_password(password: str) -> bytes:
+        return scrypt(bytes(password, 'utf-8'), salt=SCRYPT_SECRET_KEY, n=1<<14, r=8, p=1)
+
+    def create_token(self) -> str:
+        return jwt.encode(
+            dict(
+                exp=int(time()) + JWT_EXPIRES_IN,
+                username=self.username,
+                isAdmin=self.is_admin,
+                isMember=self.is_member
+            ),
+            JWT_SECRET_KEY,
+            algorithm='HS512'
+        ).decode('utf-8')
+
     def update_password(self, password):
-        self.password_hash = hash_password(password)
+        self.password_hash = User.hash_password(password)
         self.save()
 
-    def check_password(self, password):
-        return hash_password(password) == self.password_hash
+    def check_password(self, password) -> bool:
+        return User.hash_password(password) == self.password_hash
 
 
 class Record(Model):

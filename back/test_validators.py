@@ -4,7 +4,6 @@ from peewee import DoesNotExist, IntegrityError
 from pytest import raises
 
 from validators import Record, User
-from utils import hash_password
 
 def teardown_function():
     User.delete().execute() # pylint: disable=no-value-for-parameter
@@ -22,7 +21,7 @@ def test_user_validator():
     with raises(AssertionError): # password to short
         User.create("Kagamino", first_name="Martin", last_name="Lehoux", email="martin@lehoux.net", password="a")
     user = User.create("Kagamino", first_name="Martin", last_name="Lehoux", email="martin@lehoux.net", password="test1234")
-    assert user.password_hash == hash_password('test1234')
+    assert user.password_hash == User.hash_password('test1234')
     with raises(IntegrityError): # username unique
         User.create("Kagamino", first_name="Martin", last_name="Lehoux", email="martin@lehoux.net", password="test1234")
 

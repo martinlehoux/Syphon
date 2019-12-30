@@ -4,7 +4,6 @@ from typing import List, Union
 
 from models import Record as RecordModel
 from models import User as UserModel
-from utils import hash_password
 
 
 class User(UserModel):
@@ -23,7 +22,7 @@ class User(UserModel):
         # password
         assert isinstance(password, str)
         assert len(password) >= 4, "User.password must length 4 characters or more."
-        password_hash = hash_password(password)
+        password_hash = User.hash_password(password)
         # email
         assert isinstance(email, str)
         assert re.match(r'^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email), "User.email must be an email str. (%s)" % email

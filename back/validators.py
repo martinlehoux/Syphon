@@ -9,7 +9,7 @@ from utils import hash_password
 
 class User(UserModel):
     @staticmethod
-    def create(username: str, first_name: str, last_name: str, email: str, password: str): # pylint: disable=arguments-differ
+    def create(username: str, first_name: str, last_name: str, email: str, password: str, **kwargs): # pylint: disable=arguments-differ
         # username
         assert isinstance(username, str), "User.username must be a str."
         assert re.match(r'^[\w.-]+$', username), "User.username must use only a-zA-Z, _, - or . characters."

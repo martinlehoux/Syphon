@@ -10,7 +10,7 @@ from peewee import DoesNotExist, IntegrityError
 from werkzeug.exceptions import HTTPException
 
 from conf import JWT_EXPIRES_IN, JWT_SECRET_KEY, PAGE_SIZE
-from utils import token_protected
+from utils import token_protected, check_token
 from validators import Record, User
 
 APP = Flask(__name__)
@@ -45,9 +45,9 @@ def token():
 
 
 @APP.route('/users', methods=['POST', 'GET'])
-@token_protected
 def user_list():
     if request.method == "GET":
+        check_token()
         page = int(request.args.get('page') or 0)
         users = User.select().order_by(User.username).offset(page * PAGE_SIZE).limit(PAGE_SIZE)
         return jsonify([user.json() for user in users])

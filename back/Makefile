@@ -23,3 +23,7 @@ install:
 shell: env
 	. env/bin/activate
 	ENV=dev python
+
+migrate: env
+	. env/bin/activate
+	ENV=dev python migrate.py

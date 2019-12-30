@@ -1,9 +1,8 @@
-from hashlib import scrypt
 import jwt
 from flask import abort, request
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 
-from conf import JWT_SECRET_KEY, SCRYPT_SECRET_KEY
+from conf import JWT_SECRET_KEY
 
 def check_token() -> bool:
     authorization = request.headers.get('Authorization')
@@ -23,6 +22,15 @@ def check_token() -> bool:
         abort(400, "Token is tampered")
     return True
 
+def member_required(route):
+    def wrapper(*args, **kwargs):
+        check_token()
+        jwt_token = request.headers.get('Authorization').split()[1]
+        if jwt.decode(jwt_token, JWT_SECRET_KEY, algorithms='HS512')['isMember']:
+            abort(403, "Member rights are required")
+        return route(*args, **kwargs)
+    wrapper.__name__ = route.__name__
+    return wrapper
 
 def token_protected(route):
     def wrapper(*args, **kwargs):
@@ -30,6 +38,3 @@ def token_protected(route):
         return route(*args, **kwargs)
     wrapper.__name__ = route.__name__
     return wrapper
-
-def hash_password(password: str) -> bytes:
-    return scrypt(bytes(password, 'utf-8'), salt=SCRYPT_SECRET_KEY, n=1<<14, r=8, p=1)

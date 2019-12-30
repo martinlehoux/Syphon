@@ -1,14 +1,15 @@
 from datetime import datetime
-
 from models import Record, User
+from utils import hash_password
 
 
 def teardown_function():
     User.delete().execute() # pylint: disable=no-value-for-parameter
     Record.delete().execute() # pylint: disable=no-value-for-parameter
 
+
 def test_user():
-    User.create(username="Kagamino")
+    User.create(username="Kagamino", first_name="Martin", last_name="Lehoux", email="martin@lehoux.net", password_hash=hash_password('test1234'))
 
 def test_record():
     user = User(username="Kagamino")

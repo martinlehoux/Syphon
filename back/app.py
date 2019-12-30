@@ -38,8 +38,7 @@ def token():
             abort(403, f"User '{username} doesn't have a password set and can't log in")
         if not user.check_password(password):
             abort(400, f"Password is wrong for User '{username}'")
-        jwt_token = jwt.encode(dict(exp=int(time()) + JWT_EXPIRES_IN, username=username), JWT_SECRET_KEY, algorithm='HS512')
-        return jsonify(token=jwt_token.decode('utf-8')), 201
+        return jsonify(token=user.create_token()), 201
     except DoesNotExist:
         abort(404, f"User '{username}' not found")
 

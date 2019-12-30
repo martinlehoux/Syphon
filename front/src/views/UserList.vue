@@ -3,18 +3,28 @@ div
   sui-table
     sui-table-header
       sui-table-row
-        sui-table-header-cell(@click="orderUsers('username')") Username
+        sui-table-header-cell(@click="orderUsers('username')") Name
         sui-table-header-cell(@click="orderUsers('chrono')") Best record
         sui-table-header-cell Distinction
+        sui-table-header-cell Inscription date
+        sui-table-header-cell Member
+        sui-table-header-cell Admin
     sui-table-body
       sui-table-row(v-for="user in users" :key="user.username")
         sui-table-cell
-          router-link(:to="`/users/${user.username}`") {{user.username}}
+          router-link(:to="`/users/${user.username}`") {{user.username}} ({{user.firstName}} {{user.lastName}})
         sui-table-cell {{(user.bestRecord.chrono / 1000).toFixed(2)}} sec
         sui-table-cell {{user.distinction}}
+        sui-table-cell {{user.inscriptionDate}}
+        sui-table-cell
+          sui-icon(v-if="user.isMember" name="toggle on" color="green")
+          sui-icon(v-else name="toggle off" color="red")
+        sui-table-cell
+          sui-icon(v-if="user.isAdmin" name="toggle on" color="green")
+          sui-icon(v-else name="toggle off" color="red")
     sui-table-footer
       sui-table-row
-        sui-table-header-cell(colspan="3")
+        sui-table-header-cell(colspan="6")
           sui-button(:disabled="page <= 0" @click="fetchPage(page-1)" icon)
             sui-icon(name="left chevron")
           sui-button(@click="fetchPage(page+1)" icon)

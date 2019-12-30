@@ -1,7 +1,7 @@
 import http from '@/modules/http'
 
 export class Record {
-  date = new Date().toISOString().slice(0, 10)
+  date = new Date(0).toISOString().slice(0, 10)
   chrono = 0
 
   constructor ({ date, chrono, id, user }) {
@@ -14,12 +14,24 @@ export class Record {
 
 export class User {
   username = ''
+  firstName = ''
+  lastName = ''
+  email = ''
+  inscriptionDate = new Date(0).toISOString().slice(0, 10)
+  isAdmin = false
+  isMember = false
   records = []
   bestRecord = new Record({})
 
-  constructor ({ username, records, bestRecord }) {
+  constructor ({ username, firstName, lastName, email, inscriptionDate, isAdmin, isMember, records, bestRecord }) {
     this.username = username
     if (records) this.records = records
+    if (records) this.firstName = firstName
+    if (records) this.lastName = lastName
+    if (records) this.email = email
+    if (records) this.inscriptionDate = inscriptionDate
+    if (records) this.isAdmin = isAdmin
+    if (records) this.isMember = isMember
     if (bestRecord) this.bestRecord = new Record(bestRecord)
   }
 

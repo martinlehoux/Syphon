@@ -38,8 +38,8 @@ class User(Model):
         return dict(
             username=self.username,
             email=self.email,
-            first_name=self.first_name,
-            last_name=self.last_name,
+            firstName=self.first_name,
+            lastName=self.last_name,
             bestRecord=self.best_record.json() if self.best_record else self.best_record,
             inscriptionDate=self.inscription_date.isoformat(), # pylint: disable=no-member
             isAdmin=self.is_admin,

@@ -29,7 +29,10 @@ export default new Vuex.Store({
       state.logginIn = true
     },
     loginSuccess (state, token) {
-      state.username = jwt.decode(token).username
+      const data = jwt.decode(token)
+      state.username = data.username
+      state.isAdmin = data.isAdmin
+      state.isMember = data.isMember
       state.loggedIn = true
       state.logginIn = false
       state.token = token

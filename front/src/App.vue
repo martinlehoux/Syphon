@@ -1,21 +1,20 @@
 <template lang="pug">
 div(id="app")
+  Navbar
   error-list
-  div(id="nav")
-    router-link(to="/users") User List &nbsp;
-    router-link(to="/records") Records &nbsp;
-    router-link(to="/signup") Sign up &nbsp;
   sui-container
     router-view
 </template>
 
 <script>
 import ErrorList from '@/components/ErrorList.vue'
+import Navbar from '@/components/Navbar.vue'
 
 export default {
   name: 'App',
   components: {
-    ErrorList
+    ErrorList,
+    Navbar
   },
   mounted () {
     const token = localStorage.getItem('authorizationToken')
@@ -31,18 +30,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>

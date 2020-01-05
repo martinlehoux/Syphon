@@ -4,9 +4,12 @@ import UserList from '@/views/UserList.vue'
 import UserDetail from '@/views/UserDetail.vue'
 import RecordList from '@/views/RecordList.vue'
 import Login from '@/views/Login.vue'
+import Signup from '@/views/Signup.vue'
 import store from '@/store'
 
 Vue.use(VueRouter)
+
+const openRoutes = ['/', '/login', '/signup']
 
 const routes = [
   {
@@ -16,6 +19,10 @@ const routes = [
   {
     path: '/login',
     component: Login
+  },
+  {
+    path: '/signup',
+    component: Signup
   },
   {
     path: '/users/:username',
@@ -34,7 +41,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/login' || store.state.loggedIn || localStorage.getItem('authorizationToken')) {
+  if (localStorage.getItem('authorizationToken')) {
+    store.dispatch('saveToken', localStorage.getItem('authorizationToken'))
+  }
+  if (openRoutes.includes(to.path) || store.state.loggedIn) {
     return next()
   } else {
     return next('/login')

@@ -3,7 +3,8 @@ div(id="app")
   error-list
   div(id="nav")
     router-link(to="/users") User List &nbsp;
-    router-link(to="/records") Records
+    router-link(to="/records") Records &nbsp;
+    router-link(to="/signup") Sign up &nbsp;
   sui-container
     router-view
 </template>

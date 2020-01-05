@@ -6,7 +6,7 @@ from time import time
 from hashlib import scrypt
 
 from peewee import (BlobField, CharField, DateField, ForeignKeyField, BooleanField,
-                    IntegerField, Model, SqliteDatabase)
+                    IntegerField, Model, SqliteDatabase, DoesNotExist)
 import jwt
 
 from conf import SCRYPT_SECRET_KEY, JWT_EXPIRES_IN, JWT_SECRET_KEY
@@ -29,7 +29,10 @@ class User(Model):
 
     @property
     def best_record(self):
-        return self.records.select().order_by(Record.chrono).limit(1).get()
+        try:
+            return self.records.select().order_by(Record.chrono).limit(1).get()
+        except DoesNotExist:
+            return None
 
     def json(self):
         return dict(
@@ -37,7 +40,7 @@ class User(Model):
             email=self.email,
             first_name=self.first_name,
             last_name=self.last_name,
-            bestRecord=self.best_record.json(),
+            bestRecord=self.best_record.json() if self.best_record else self.best_record,
             inscriptionDate=self.inscription_date.isoformat(), # pylint: disable=no-member
             isAdmin=self.is_admin,
             isMember=self.is_member

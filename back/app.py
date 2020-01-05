@@ -1,15 +1,13 @@
 #! ./env/bin/python
 from sys import argv
-from time import time
 
-import jwt
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 from kaga_logger import DEBUG, Logger
 from peewee import DoesNotExist, IntegrityError
 from werkzeug.exceptions import HTTPException
 
-from conf import JWT_EXPIRES_IN, JWT_SECRET_KEY, PAGE_SIZE
+from conf import PAGE_SIZE
 from utils import token_protected, check_token
 from validators import Record, User
 

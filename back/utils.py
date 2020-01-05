@@ -32,6 +32,16 @@ def member_required(route):
     wrapper.__name__ = route.__name__
     return wrapper
 
+def admin_required(route):
+    def wrapper(*args, **kwargs):
+        check_token()
+        jwt_token = request.headers.get('Authorization').split()[1]
+        if jwt.decode(jwt_token, JWT_SECRET_KEY, algorithms='HS512')['isAdmin']:
+            abort(403, "Admin rights are required")
+        return route(*args, **kwargs)
+    wrapper.__name__ = route.__name__
+    return wrapper
+
 def token_protected(route):
     def wrapper(*args, **kwargs):
         check_token()

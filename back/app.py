@@ -8,7 +8,7 @@ from peewee import DoesNotExist, IntegrityError
 from werkzeug.exceptions import HTTPException
 
 from conf import PAGE_SIZE
-from utils import token_protected, check_token
+from utils import token_protected, check_token, check_admin
 from validators import Record, User
 
 APP = Flask(__name__)
@@ -55,13 +55,22 @@ def user_list():
         except (AssertionError, IntegrityError) as err:
             abort(400, err)
 
-@APP.route('/users/<string:username>', methods=['GET'])
+
+@APP.route('/users/<string:username>', methods=['GET', 'DELETE'])
 @token_protected
 def user_detail(username: str):
     if request.method == 'GET':
         try:
             user = User.get(User.username == username)
             return jsonify(user.json())
+        except DoesNotExist:
+            abort(404, f"User '{username}' not found")
+    if request.method == "DELETE":
+        check_admin()
+        try:
+            user = User.get(User.username == username)
+            user.delete_instance()
+            return jsonify(), 204
         except DoesNotExist:
             abort(404, f"User '{username}' not found")
 

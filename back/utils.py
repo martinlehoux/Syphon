@@ -3,6 +3,7 @@ from flask import abort, request
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 
 from conf import JWT_SECRET_KEY
+from validators import User
 
 def check_token() -> bool:
     authorization = request.headers.get('Authorization')
@@ -22,21 +23,27 @@ def check_token() -> bool:
         abort(400, "Token is tampered")
     return True
 
+def check_member() -> bool:
+    check_token()
+    jwt_token = request.headers.get('Authorization').split()[1]
+    return jwt.decode(jwt_token, JWT_SECRET_KEY, algorithms='HS512')['isMember']
+
 def member_required(route):
     def wrapper(*args, **kwargs):
-        check_token()
-        jwt_token = request.headers.get('Authorization').split()[1]
-        if jwt.decode(jwt_token, JWT_SECRET_KEY, algorithms='HS512')['isMember']:
+        if not check_member():
             abort(403, "Member rights are required")
         return route(*args, **kwargs)
     wrapper.__name__ = route.__name__
     return wrapper
 
+def check_admin() -> bool:
+    check_token()
+    jwt_token = request.headers.get('Authorization').split()[1]
+    return jwt.decode(jwt_token, JWT_SECRET_KEY, algorithms='HS512')['isAdmin']
+
 def admin_required(route):
     def wrapper(*args, **kwargs):
-        check_token()
-        jwt_token = request.headers.get('Authorization').split()[1]
-        if jwt.decode(jwt_token, JWT_SECRET_KEY, algorithms='HS512')['isAdmin']:
+        if check_admin():
             abort(403, "Admin rights are required")
         return route(*args, **kwargs)
     wrapper.__name__ = route.__name__

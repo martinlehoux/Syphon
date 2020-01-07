@@ -43,7 +43,8 @@ class User(Model):
             bestRecord=self.best_record.json() if self.best_record else self.best_record,
             inscriptionDate=self.inscription_date.isoformat(), # pylint: disable=no-member
             isAdmin=self.is_admin,
-            isMember=self.is_member
+            isMember=self.is_member,
+            hasPassword=bool(self.password_hash)
         )
 
     @staticmethod

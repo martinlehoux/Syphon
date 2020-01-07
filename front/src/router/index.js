@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import UserList from '@/views/UserList.vue'
+import Admin from '@/views/Admin.vue'
 import UserDetail from '@/views/UserDetail.vue'
 import RecordList from '@/views/RecordList.vue'
 import Login from '@/views/Login.vue'
@@ -13,8 +13,8 @@ const openRoutes = ['/', '/login', '/signup']
 
 const routes = [
   {
-    path: '/users',
-    component: UserList
+    path: '/admin',
+    component: Admin
   },
   {
     path: '/login',

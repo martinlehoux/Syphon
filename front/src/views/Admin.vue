@@ -4,17 +4,15 @@ div
     sui-table-header
       sui-table-row
         sui-table-header-cell(@click="orderUsers('username')") Name
-        sui-table-header-cell(@click="orderUsers('chrono')") Best record
-        sui-table-header-cell Distinction
-        sui-table-header-cell Inscription date
+        sui-table-header-cell(@click="orderUsers('inscriptionDate')") Inscription date
         sui-table-header-cell Member
         sui-table-header-cell Admin
+        sui-table-header-cell Password set
+        sui-table-header-cell Actions
     sui-table-body
       sui-table-row(v-for="user in users" :key="user.username")
         sui-table-cell
           router-link(:to="`/users/${user.username}`") {{user.username}} ({{user.firstName}} {{user.lastName}})
-        sui-table-cell {{(user.bestRecord.chrono / 1000).toFixed(2)}} sec
-        sui-table-cell {{user.distinction}}
         sui-table-cell {{user.inscriptionDate}}
         sui-table-cell
           sui-icon(v-if="user.isMember" name="toggle on" color="green")
@@ -22,6 +20,13 @@ div
         sui-table-cell
           sui-icon(v-if="user.isAdmin" name="toggle on" color="green")
           sui-icon(v-else name="toggle off" color="red")
+        sui-table-cell
+          sui-icon(v-if="user.hasPassword" name="toggle on" color="green")
+          sui-icon(v-else name="toggle off" color="red")
+        sui-table-cell
+          sui-button(v-if="user.email" size="mini" icon="key" basic color="purple") New password
+          sui-button(v-else size="mini" icon="key" basic color="purple" disabled) No email
+          sui-button(size="mini" icon="trash" basic color="red" @click="deletingUser = user")
     sui-table-footer
       sui-table-row
         sui-table-header-cell(colspan="6")
@@ -35,18 +40,25 @@ div
         label Username
         input(type="text" v-model="newUser.username" id="")
       sui-button(type="submit" basic positive) Create user
+
+  DeleteUser(:user="deletingUser" v-if="deletingUser" @quit="deletingUser = null" @remove="username => removeUser(username)")
 </template>
 
 <script>
 import { User } from '@/modules/models'
+import DeleteUser from '@/components/DeleteUser'
 
 export default {
-  name: 'UserList',
+  name: 'Admin',
+  components: {
+    DeleteUser
+  },
   data () {
     return {
       users: [],
       newUser: {} || new User({}),
-      page: Number(this.$route.query.page) || 0
+      page: Number(this.$route.query.page) || 0,
+      deletingUser: null
     }
   },
   mounted () {
@@ -60,7 +72,7 @@ export default {
     },
     fetchPage (page) {
       this.page = page
-      this.$router.push(`/users?page=${page}`)
+      this.$router.push(`/admin?page=${page}`)
       this.getUsers()
     },
     createUser () {
@@ -74,10 +86,13 @@ export default {
           .then(() => (this.newUser = new User({})))
       }
     },
+    removeUser (username) {
+      this.users = this.users.filter(user => user.username !== username)
+    },
     orderUsers (order) {
       switch (order) {
-        case 'chrono':
-          this.users.sort((a, b) => a.bestRecord.chrono > b.bestRecord.chrono)
+        case 'inscriptionDate':
+          this.users.sort((a, b) => a.inscriptionDate < b.inscriptionDate)
           break
         case 'username':
           this.users.sort((a, b) => a.username > b.username)

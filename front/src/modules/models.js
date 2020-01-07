@@ -23,15 +23,16 @@ export class User {
   records = []
   bestRecord = new Record({})
 
-  constructor ({ username, firstName, lastName, email, inscriptionDate, isAdmin, isMember, records, bestRecord }) {
+  constructor ({ username, firstName, lastName, email, inscriptionDate, isAdmin, isMember, hasPassword, records, bestRecord }) {
     this.username = username
     if (records) this.records = records
-    if (records) this.firstName = firstName
-    if (records) this.lastName = lastName
-    if (records) this.email = email
-    if (records) this.inscriptionDate = inscriptionDate
-    if (records) this.isAdmin = isAdmin
-    if (records) this.isMember = isMember
+    if (firstName) this.firstName = firstName
+    if (lastName) this.lastName = lastName
+    if (email) this.email = email
+    if (inscriptionDate) this.inscriptionDate = inscriptionDate
+    if (isAdmin) this.isAdmin = isAdmin
+    if (isMember) this.isMember = isMember
+    if (hasPassword) this.hasPassword = hasPassword
     if (bestRecord) this.bestRecord = new Record(bestRecord)
   }
 

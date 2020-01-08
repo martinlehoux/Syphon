@@ -123,8 +123,8 @@ def charts():
                 date.strftime('%Y-%m'),
                 Record.select().where(Record.date.between(
                     date.strftime('%Y-%m') + '-01',
-                    date.strftime('%Y-%m') + '-31')
-                ).count()
+                    date.strftime('%Y-%m') + '-31'
+                )).count()
             ])
         # histogram
         histogram_chart = [['Username', 'Best record']]

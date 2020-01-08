@@ -13,7 +13,7 @@ serve: env
 
 nserve: env
 	. env/bin/activate
-	ENV=dev ./app.py 192.168.0.12
+	ENV=dev ./app.py 0
 
 install:
 	virtualenv env

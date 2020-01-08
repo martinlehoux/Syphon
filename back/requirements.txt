@@ -5,3 +5,4 @@ pylint
 pytest
 peewee
 pyjwt
+python-dateutil

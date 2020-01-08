@@ -2,14 +2,14 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Admin from '@/views/Admin.vue'
 import UserDetail from '@/views/UserDetail.vue'
-import RecordList from '@/views/RecordList.vue'
+import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Signup from '@/views/Signup.vue'
 import store from '@/store'
 
 Vue.use(VueRouter)
 
-const openRoutes = ['/', '/login', '/signup']
+const openRoutes = ['/login', '/signup']
 
 const routes = [
   {
@@ -29,8 +29,8 @@ const routes = [
     component: UserDetail
   },
   {
-    path: '/records',
-    component: RecordList
+    path: '/',
+    component: Home
   }
 ]
 

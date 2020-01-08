@@ -9,7 +9,7 @@ from werkzeug.exceptions import HTTPException
 from dateutil.rrule import rrule, MONTHLY
 
 from conf import PAGE_SIZE
-from utils import token_protected, check_token, check_admin
+from utils import token_protected, check_admin
 from validators import Record, User
 
 APP = Flask(__name__)

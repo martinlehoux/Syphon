@@ -1,6 +1,6 @@
 import re
 from datetime import date as datetype
-from typing import List, Union
+from typing import Union
 
 from models import Record as RecordModel
 from models import User as UserModel

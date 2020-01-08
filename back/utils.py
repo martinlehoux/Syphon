@@ -3,7 +3,6 @@ from flask import abort, request
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 
 from conf import JWT_SECRET_KEY
-from validators import User
 
 def check_token() -> bool:
     authorization = request.headers.get('Authorization')

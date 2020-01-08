@@ -1,9 +1,10 @@
 from datetime import date
 
-from peewee import DoesNotExist, IntegrityError
 from pytest import raises
 
+from peewee import DoesNotExist, IntegrityError
 from validators import Record, User
+
 
 def teardown_function():
     User.delete().execute() # pylint: disable=no-value-for-parameter

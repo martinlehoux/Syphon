@@ -77,6 +77,7 @@ export default new Vuex.Store({
       }
     },
     logout ({ commit }) {
+      localStorage.removeItem('authorizationToken')
       commit('logout')
     }
   },

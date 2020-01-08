@@ -43,7 +43,7 @@ def check_admin() -> bool:
 
 def admin_required(route):
     def wrapper(*args, **kwargs):
-        if check_admin():
+        if not check_admin():
             abort(403, "Admin rights are required")
         return route(*args, **kwargs)
     wrapper.__name__ = route.__name__

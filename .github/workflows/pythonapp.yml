@@ -16,9 +16,12 @@ jobs:
     - name: Install dependencies
       working-directory: ./back
       run: pip install -r requirements.txt
+    - name: Add conf file
+      working-directory: ./back
+      run: cp conf.tmp.py conf.py
     - name: Lint with pylint
       working-directory: ./back
-      run: pylint *.py
+      run: pylint -E *.py
     - name: Test with pytest
       working-directory: ./back
       run: python -m pytest
